@@ -11,16 +11,17 @@ impl Parser {
         Parser { tokens, current: 0 }
     }
 
-    pub fn parse(&mut self) -> Vec<Statement> {
+    pub fn parse(&mut self) -> Result<Vec<Statement>, String> {
         let mut statements = Vec::new();
 
         while !self.is_at_end() {
-            if let Some(stmt) = self.statement() {
-                statements.push(stmt);
+            match self.statement() {
+                Some(stmt) => statements.push(stmt),
+                None => return Err("Type of annotation not available.".to_string()),
             }
         }
 
-        statements
+        Ok(statements)
     }
 
     fn statement(&mut self) -> Option<Statement> {
@@ -45,7 +46,9 @@ impl Parser {
                 Token::StringType => value_type = Some(Type::String),
                 Token::IntType => value_type = Some(Type::Int),
                 Token::BooleanType => value_type = Some(Type::Boolean),
-                _ => return None,
+                _ => {
+                    return None;
+                }
             }
         }
 
@@ -72,7 +75,11 @@ impl Parser {
         if let Token::Assign = self.advance() {
             if let Some(value) = self.expression() {
                 if let Token::Semicolon = self.advance() {
-                    return Some(Statement::VariableAssignment { name, value, value_type: None });
+                    return Some(Statement::VariableAssignment {
+                        name,
+                        value,
+                        value_type: None,
+                    });
                 }
             }
         }
@@ -120,5 +127,5 @@ impl Parser {
 pub enum Type {
     String,
     Int,
-    Boolean
+    Boolean,
 }

@@ -1,15 +1,17 @@
+mod interpreter;
 mod lexer;
 mod parser;
-mod interpreter;
 
 fn execute(input: &str) {
     let tokens = lexer::lexer::lexer(input);
-
     let mut parser = parser::parser::Parser::new(tokens);
-    let statements = parser.parse();
-
-    let mut interpreter = interpreter::interpreter::Interpreter::new();
-    interpreter.interpret(statements);
+    match parser.parse() {
+        Ok(statements) => {
+            let mut interpreter = interpreter::interpreter::Interpreter::new();
+            interpreter.interpret(statements);
+        }
+        Err(error) => eprintln!("{}", error),
+    }
 }
 
 fn main() {
