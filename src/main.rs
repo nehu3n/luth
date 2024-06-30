@@ -20,11 +20,12 @@ fn main() {
     var age = 15;
     var isDev = true;
 
-    name = "Pedro";
-    age = 25;
-    isDev = false;
+    name = 10;
 
-    print(age);
+    print(name);
+
+    name = "Juan";
+    print(name);
     "#;
 
     execute(input_dynamic);
@@ -34,10 +35,11 @@ fn main() {
     var age: Int = 15;
     var isDev: Bool = true;
 
-    name = "Pedro";
-    age = 25;
-    isDev = false;
+    name = 10;
 
+    print(name);
+
+    name = "Juan";
     print(name);
     "#;
 

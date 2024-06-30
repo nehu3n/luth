@@ -14,11 +14,17 @@ impl Interpreter {
 
     pub fn interpret(&mut self, statements: Vec<Statement>) {
         for statement in statements {
-            self.execute(statement);
+            match self.execute(statement) {
+                Ok(()) => {}
+                Err(error) => {
+                    eprintln!("{}", error);
+                    return;
+                }
+            }
         }
     }
 
-    fn execute(&mut self, statement: Statement) {
+    fn execute(&mut self, statement: Statement) -> Result<(), String> {
         match statement {
             Statement::VariableDeclaration {
                 name,
@@ -27,6 +33,7 @@ impl Interpreter {
             } => {
                 let val = self.evaluate(value);
                 self.environment.define(name, val, value_type);
+                Ok(())
             }
             Statement::VariableAssignment {
                 name,
@@ -35,13 +42,14 @@ impl Interpreter {
             } => {
                 let val = self.evaluate(value);
                 match self.environment.assign(name, val) {
-                    Ok(()) => (),
-                    Err(err) => eprintln!("{}", err),
+                    Ok(()) => Ok(()),
+                    Err(err) => Err(err),
                 }
             }
             Statement::Print(value) => {
                 let val = self.evaluate(value);
-                print!("{}", val);
+                println!("{}", val);
+                Ok(())
             }
         }
     }
