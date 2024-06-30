@@ -28,6 +28,9 @@ enum LexerToken {
     #[token("=")]
     Assign,
 
+    #[token(";")]
+    Semicolon,
+
     #[end]
     EOF,
 }
@@ -44,6 +47,7 @@ pub fn lexer(input: &str) -> Vec<Token> {
             Ok(LexerToken::StringLiteral(lit)) => tokens.push(Token::StringLiteral(lit)),
             Ok(LexerToken::NumberLiteral(num)) => tokens.push(Token::NumberLiteral(num)),
             Ok(LexerToken::BooleanLiteral(b)) => tokens.push(Token::BooleanLiteral(b)),
+            Ok(LexerToken::Semicolon) => tokens.push(Token::Semicolon),
             Ok(LexerToken::Assign) => tokens.push(Token::Assign),
             Ok(LexerToken::EOF) => tokens.push(Token::EOF),
 

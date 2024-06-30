@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Var,
     Identifier(String),
@@ -6,5 +6,6 @@ pub enum Token {
     NumberLiteral(f64),
     BooleanLiteral(bool),
     Assign,
+    Semicolon,
     EOF,
 }
