@@ -15,9 +15,8 @@ impl Parser {
         let mut statements = Vec::new();
 
         while !self.is_at_end() {
-            match self.statement() {
-                Some(stmt) => statements.push(stmt),
-                None => return Err("Type of annotation not available.".to_string()),
+            if let Some(stmt) = self.statement() {
+                statements.push(stmt);
             }
         }
 
@@ -28,6 +27,7 @@ impl Parser {
         match self.peek() {
             Token::Var => self.variable_declaration(),
             Token::Identifier(_) => self.variable_assignment(),
+            Token::Print => self.print_statement(),
             _ => None,
         }
     }
@@ -80,6 +80,23 @@ impl Parser {
                         value,
                         value_type: None,
                     });
+                }
+            }
+        }
+        None
+    }
+
+    fn print_statement(&mut self) -> Option<Statement> {
+        self.advance();
+        if self.peek() == Token::LeftParen {
+            self.advance();
+            if let Some(value) = self.expression() {
+                if self.peek() == Token::RightParen {
+                    self.advance();
+                    if self.peek() == Token::Semicolon {
+                        self.advance();
+                        return Some(Statement::Print(value));
+                    }
                 }
             }
         }

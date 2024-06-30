@@ -23,6 +23,8 @@ fn main() {
     name = "Pedro";
     age = 25;
     isDev = false;
+
+    print(age);
     "#;
 
     execute(input_dynamic);
@@ -35,6 +37,8 @@ fn main() {
     name = "Pedro";
     age = 25;
     isDev = false;
+
+    print(name);
     "#;
 
     execute(input_static);

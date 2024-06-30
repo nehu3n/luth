@@ -43,6 +43,15 @@ enum LexerToken {
     #[token(":")]
     Colon,
 
+    #[token("print")]
+    Print,
+
+    #[token("(")]
+    LeftParen,
+
+    #[token(")")]
+    RightParen,
+
     #[end]
     EOF,
 }
@@ -66,6 +75,9 @@ pub fn lexer(input: &str) -> Vec<Token> {
             Ok(LexerToken::Assign) => tokens.push(Token::Assign),
             Ok(LexerToken::Colon) => tokens.push(Token::Colon),
             Ok(LexerToken::EOF) => tokens.push(Token::EOF),
+            Ok(LexerToken::Print) => tokens.push(Token::Print),
+            Ok(LexerToken::LeftParen) => tokens.push(Token::LeftParen),
+            Ok(LexerToken::RightParen) => tokens.push(Token::RightParen),
 
             Err(_) => continue,
         }

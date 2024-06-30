@@ -11,5 +11,8 @@ pub enum Token {
     Assign,
     Semicolon,
     Colon,
+    Print,
+    LeftParen,
+    RightParen,
     EOF,
 }
