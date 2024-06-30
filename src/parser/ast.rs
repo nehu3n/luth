@@ -1,7 +1,9 @@
+use super::parser::Type;
+
 #[derive(Debug)]
 pub enum Statement {
-    VariableDeclaration { name: String, value: Expression },
-    VariableAssignment { name: String, value: Expression },
+    VariableDeclaration { name: String, value: Expression, value_type: Option<Type> },
+    VariableAssignment { name: String, value: Expression, value_type: Option<Type> },
 }
 
 #[derive(Debug)]

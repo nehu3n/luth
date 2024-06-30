@@ -9,6 +9,15 @@ enum LexerToken {
     #[token("var")]
     Var,
 
+    #[token("String")]
+    StringType,
+
+    #[token("Int")]
+    IntType,
+
+    #[token("Bool")]
+    BooleanType,
+
     #[regex("[a-zA-Z][a-zA-Z0-9_]*", |lex| lex.slice().to_string())]
     Identifier(String),
 
@@ -31,6 +40,9 @@ enum LexerToken {
     #[token(";")]
     Semicolon,
 
+    #[token(":")]
+    Colon,
+
     #[end]
     EOF,
 }
@@ -43,12 +55,16 @@ pub fn lexer(input: &str) -> Vec<Token> {
         match token {
             Ok(LexerToken::Ignored) => continue,
             Ok(LexerToken::Var) => tokens.push(Token::Var),
+            Ok(LexerToken::StringType) => tokens.push(Token::StringType),
+            Ok(LexerToken::IntType) => tokens.push(Token::IntType),
+            Ok(LexerToken::BooleanType) => tokens.push(Token::BooleanType),
             Ok(LexerToken::Identifier(id)) => tokens.push(Token::Identifier(id)),
             Ok(LexerToken::StringLiteral(lit)) => tokens.push(Token::StringLiteral(lit)),
             Ok(LexerToken::NumberLiteral(num)) => tokens.push(Token::NumberLiteral(num)),
             Ok(LexerToken::BooleanLiteral(b)) => tokens.push(Token::BooleanLiteral(b)),
             Ok(LexerToken::Semicolon) => tokens.push(Token::Semicolon),
             Ok(LexerToken::Assign) => tokens.push(Token::Assign),
+            Ok(LexerToken::Colon) => tokens.push(Token::Colon),
             Ok(LexerToken::EOF) => tokens.push(Token::EOF),
 
             Err(_) => continue,

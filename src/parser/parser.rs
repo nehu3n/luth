@@ -33,12 +33,30 @@ impl Parser {
 
     fn variable_declaration(&mut self) -> Option<Statement> {
         self.advance();
-        if let Token::Identifier(name) = self.advance() {
-            if let Token::Assign = self.advance() {
-                if let Some(value) = self.expression() {
-                    if let Token::Semicolon = self.advance() {
-                        return Some(Statement::VariableDeclaration { name, value });
-                    }
+        let name = match self.advance() {
+            Token::Identifier(name) => name,
+            _ => return None,
+        };
+
+        let mut value_type = None;
+        if let Token::Colon = self.peek() {
+            self.advance();
+            match self.advance() {
+                Token::StringType => value_type = Some(Type::String),
+                Token::IntType => value_type = Some(Type::Int),
+                Token::BooleanType => value_type = Some(Type::Boolean),
+                _ => return None,
+            }
+        }
+
+        if let Token::Assign = self.advance() {
+            if let Some(value) = self.expression() {
+                if let Token::Semicolon = self.advance() {
+                    return Some(Statement::VariableDeclaration {
+                        name,
+                        value,
+                        value_type,
+                    });
                 }
             }
         }
@@ -46,12 +64,15 @@ impl Parser {
     }
 
     fn variable_assignment(&mut self) -> Option<Statement> {
-        if let Token::Identifier(name) = self.advance() {
-            if let Token::Assign = self.advance() {
-                if let Some(value) = self.expression() {
-                    if let Token::Semicolon = self.advance() {
-                        return Some(Statement::VariableAssignment { name, value });
-                    }
+        let name = match self.advance() {
+            Token::Identifier(name) => name,
+            _ => return None,
+        };
+
+        if let Token::Assign = self.advance() {
+            if let Some(value) = self.expression() {
+                if let Token::Semicolon = self.advance() {
+                    return Some(Statement::VariableAssignment { name, value, value_type: None });
                 }
             }
         }
@@ -93,4 +114,11 @@ impl Parser {
     fn is_at_end(&self) -> bool {
         self.current >= self.tokens.len()
     }
+}
+
+#[derive(Debug)]
+pub enum Type {
+    String,
+    Int,
+    Boolean
 }

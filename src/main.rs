@@ -2,8 +2,18 @@ mod lexer;
 mod parser;
 mod interpreter;
 
+fn execute(input: &str) {
+    let tokens = lexer::lexer::lexer(input);
+
+    let mut parser = parser::parser::Parser::new(tokens);
+    let statements = parser.parse();
+
+    let mut interpreter = interpreter::interpreter::Interpreter::new();
+    interpreter.interpret(statements);
+}
+
 fn main() {
-    let input = r#"
+    let input_dynamic = r#"
     var name = "Nehuén";
     var age = 15;
     var isDev = true;
@@ -13,11 +23,17 @@ fn main() {
     isDev = false;
     "#;
 
-    let tokens = lexer::lexer::lexer(input);
+    execute(input_dynamic);
 
-    let mut parser = parser::parser::Parser::new(tokens);
-    let statements = parser.parse();
+    let input_static = r#"
+    var name: String = "Nehuén";
+    var age: Int = 15;
+    var isDev: Bool = true;
 
-    let mut interpreter = interpreter::interpreter::Interpreter::new();
-    interpreter.interpret(statements);
+    name = "Pedro";
+    age = 25;
+    isDev = false;
+    "#;
+
+    execute(input_static);
 }
