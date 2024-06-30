@@ -1,5 +1,6 @@
 mod lexer;
 mod parser;
+mod interpreter;
 
 fn main() {
     let input = r#"
@@ -16,7 +17,7 @@ fn main() {
 
     let mut parser = parser::parser::Parser::new(tokens);
     let statements = parser.parse();
-    for statement in statements {
-        println!("{:?}", statement);
-    }
+
+    let mut interpreter = interpreter::interpreter::Interpreter::new();
+    interpreter.interpret(statements);
 }
