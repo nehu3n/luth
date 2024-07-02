@@ -1,4 +1,4 @@
-use crate::lexer::token::Token;
+use crate::runtime::lexer::token::Token;
 use logos::Logos;
 
 #[derive(Debug, PartialEq, Logos)]

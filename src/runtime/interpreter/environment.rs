@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::parser::parser::Type;
+use crate::runtime::parser::parser::Type;
 
 #[derive(Debug)]
 pub struct Environment {

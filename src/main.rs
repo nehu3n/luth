@@ -1,13 +1,12 @@
-mod interpreter;
-mod lexer;
-mod parser;
+mod runtime;
+mod cli;
 
 fn execute(input: &str) {
-    let tokens = lexer::lexer::lexer(input);
-    let mut parser = parser::parser::Parser::new(tokens);
+    let tokens = runtime::lexer::lexer::lexer(input);
+    let mut parser = runtime::parser::parser::Parser::new(tokens);
     match parser.parse() {
         Ok(statements) => {
-            let mut interpreter = interpreter::interpreter::Interpreter::new();
+            let mut interpreter = runtime::interpreter::interpreter::Interpreter::new();
             interpreter.interpret(statements);
         }
         Err(error) => eprintln!("{}", error),

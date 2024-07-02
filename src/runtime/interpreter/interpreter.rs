@@ -1,5 +1,5 @@
-use crate::interpreter::environment::{Environment, Value};
-use crate::parser::ast::{Expression, Statement};
+use crate::runtime::interpreter::environment::{Environment, Value};
+use crate::runtime::parser::ast::{Expression, Statement};
 
 pub struct Interpreter {
     environment: Environment,
