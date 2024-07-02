@@ -2,17 +2,22 @@
 pub enum Token {
     Var,
     Identifier(String),
-    StringLiteral(String),
-    StringType,
-    NumberLiteral(f64),
-    IntType,
-    BooleanLiteral(bool),
-    BooleanType,
     Assign,
+
+    StringLiteral(String),
+    NumberLiteral(f64),
+    BooleanLiteral(bool),
+    StringType,
+    IntType,
+    BooleanType,
+
     Semicolon,
     Colon,
+
     Print,
+
     LeftParen,
     RightParen,
+
     EOF,
 }
