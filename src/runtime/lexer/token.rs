@@ -16,6 +16,9 @@ pub enum Token {
 
     Print,
 
+    If,
+    Else,
+
     LeftParen,
     RightParen,
 

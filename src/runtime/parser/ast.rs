@@ -13,6 +13,11 @@ pub enum Statement {
         value_type: Option<Type>,
     },
     Print(Expression),
+    If {
+        condition: Expression,
+        then_branch: Box<Statement>,
+        else_branch: Option<Box<Statement>>,
+    },
 }
 
 #[derive(Debug)]

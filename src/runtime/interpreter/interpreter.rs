@@ -38,18 +38,29 @@ impl Interpreter {
             Statement::VariableAssignment {
                 name,
                 value,
-                value_type,
+                value_type: _,
             } => {
                 let val = self.evaluate(value);
-                match self.environment.assign(name, val) {
-                    Ok(()) => Ok(()),
-                    Err(err) => Err(err),
-                }
+                self.environment.assign(name, val)?;
+                Ok(())
             }
             Statement::Print(value) => {
                 let val = self.evaluate(value);
                 println!("{}", val);
                 Ok(())
+            }
+            Statement::If {
+                condition,
+                then_branch,
+                else_branch,
+            } => {
+                if self.evaluate(condition).is_truthy() {
+                    self.execute(*then_branch)
+                } else if let Some(else_branch) = else_branch {
+                    self.execute(*else_branch)
+                } else {
+                    Ok(())
+                }
             }
         }
     }
@@ -66,6 +77,18 @@ impl Interpreter {
                     Value::Nil
                 }
             },
+        }
+    }
+}
+
+impl Value {
+    fn is_truthy(&self) -> bool {
+        match self {
+            Value::NumberLiteral(n) => *n != 0.0,
+            Value::StringLiteral(s) => !s.is_empty(),
+            Value::BooleanLiteral(b) => *b,
+            Value::Nil => false,
+            _ => true,
         }
     }
 }

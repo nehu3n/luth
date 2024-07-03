@@ -15,7 +15,7 @@ impl Parser {
         let mut statements = Vec::new();
 
         while !self.is_at_end() {
-            if let Some(stmt) = self.statement() {
+            if let Ok(stmt) = self.statement() {
                 statements.push(stmt);
             }
         }
@@ -23,105 +23,125 @@ impl Parser {
         Ok(statements)
     }
 
-    fn statement(&mut self) -> Option<Statement> {
+    fn statement(&mut self) -> Result<Statement, String> {
         match self.peek() {
             Token::Var => self.variable_declaration(),
             Token::Identifier(_) => self.variable_assignment(),
             Token::Print => self.print_statement(),
-            _ => None,
+            Token::If => self.if_statement(),
+            _ => Err("Unexpected token in statement".to_string()),
         }
     }
 
-    fn variable_declaration(&mut self) -> Option<Statement> {
+    fn variable_declaration(&mut self) -> Result<Statement, String> {
         self.advance();
         let name = match self.advance() {
             Token::Identifier(name) => name,
-            _ => return None,
+            _ => return Err("Expected variable name".to_string()),
         };
 
         let mut value_type = None;
         if let Token::Colon = self.peek() {
             self.advance();
-            match self.advance() {
-                Token::StringType => value_type = Some(Type::String),
-                Token::IntType => value_type = Some(Type::Int),
-                Token::BooleanType => value_type = Some(Type::Boolean),
-                _ => {
-                    return None;
-                }
-            }
+            value_type = Some(self.parse_type()?);
         }
 
         if let Token::Assign = self.advance() {
-            if let Some(value) = self.expression() {
-                if let Token::Semicolon = self.advance() {
-                    return Some(Statement::VariableDeclaration {
-                        name,
-                        value,
-                        value_type,
-                    });
-                }
+            let value = self.expression()?;
+            if let Token::Semicolon = self.advance() {
+                return Ok(Statement::VariableDeclaration {
+                    name,
+                    value,
+                    value_type,
+                });
             }
         }
-        None
+        Err("Invalid variable declaration".to_string())
     }
 
-    fn variable_assignment(&mut self) -> Option<Statement> {
+    fn variable_assignment(&mut self) -> Result<Statement, String> {
         let name = match self.advance() {
             Token::Identifier(name) => name,
-            _ => return None,
+            _ => return Err("Expected variable name".to_string()),
         };
 
         if let Token::Assign = self.advance() {
-            if let Some(value) = self.expression() {
-                if let Token::Semicolon = self.advance() {
-                    return Some(Statement::VariableAssignment {
-                        name,
-                        value,
-                        value_type: None,
-                    });
-                }
+            let value = self.expression()?;
+            if let Token::Semicolon = self.advance() {
+                return Ok(Statement::VariableAssignment {
+                    name,
+                    value,
+                    value_type: None,
+                });
             }
         }
-        None
+        Err("Invalid variable assignment".to_string())
     }
 
-    fn print_statement(&mut self) -> Option<Statement> {
+    fn print_statement(&mut self) -> Result<Statement, String> {
         self.advance();
         if self.peek() == Token::LeftParen {
             self.advance();
-            if let Some(value) = self.expression() {
-                if self.peek() == Token::RightParen {
+            let value = self.expression()?;
+            if self.peek() == Token::RightParen {
+                self.advance();
+                if self.peek() == Token::Semicolon {
                     self.advance();
-                    if self.peek() == Token::Semicolon {
-                        self.advance();
-                        return Some(Statement::Print(value));
-                    }
+                    return Ok(Statement::Print(value));
                 }
             }
         }
-        None
+        Err("Invalid print statement".to_string())
     }
 
-    fn expression(&mut self) -> Option<Expression> {
+    fn if_statement(&mut self) -> Result<Statement, String> {
+        self.advance();
+
+        let condition = self.expression()?;
+        let then_branch = Box::new(self.statement()?);
+
+        let else_branch = if self.peek() == Token::Else {
+            self.advance();
+            Some(Box::new(self.statement()?))
+        } else {
+            None
+        };
+
+        Ok(Statement::If {
+            condition,
+            then_branch,
+            else_branch,
+        })
+    }
+
+    fn expression(&mut self) -> Result<Expression, String> {
         match self.peek() {
             Token::StringLiteral(lit) => {
                 self.advance();
-                Some(Expression::StringLiteral(lit))
+                Ok(Expression::StringLiteral(lit))
             }
             Token::NumberLiteral(num) => {
                 self.advance();
-                Some(Expression::NumberLiteral(num))
+                Ok(Expression::NumberLiteral(num))
             }
             Token::BooleanLiteral(b) => {
                 self.advance();
-                Some(Expression::BooleanLiteral(b))
+                Ok(Expression::BooleanLiteral(b))
             }
             Token::Identifier(id) => {
                 self.advance();
-                Some(Expression::Identifier(id))
+                Ok(Expression::Identifier(id))
             }
-            _ => None,
+            _ => Err("Unexpected token in expression".to_string()),
+        }
+    }
+
+    fn parse_type(&mut self) -> Result<Type, String> {
+        match self.advance() {
+            Token::StringType => Ok(Type::String),
+            Token::IntType => Ok(Type::Int),
+            Token::BooleanType => Ok(Type::Boolean),
+            _ => Err("Unexpected token in type".to_string()),
         }
     }
 

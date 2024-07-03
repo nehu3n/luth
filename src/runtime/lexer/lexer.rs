@@ -58,6 +58,12 @@ enum LexerToken {
     #[token(")")]
     RightParen,
 
+    #[token("if")]
+    If,
+
+    #[token("else")]
+    Else,
+
     #[end]
     EOF,
 }
@@ -88,6 +94,9 @@ pub fn lexer(input: &str) -> Vec<Token> {
             Ok(LexerToken::Colon) => tokens.push(Token::Colon),
 
             Ok(LexerToken::Print) => tokens.push(Token::Print),
+
+            Ok(LexerToken::If) => tokens.push(Token::If),
+            Ok(LexerToken::Else) => tokens.push(Token::Else),
 
             Ok(LexerToken::LeftParen) => tokens.push(Token::LeftParen),
             Ok(LexerToken::RightParen) => tokens.push(Token::RightParen),
