@@ -1,5 +1,5 @@
 use crate::runtime::lexer::token::Token;
-use crate::runtime::parser::ast::{Expression, Statement};
+use crate::runtime::parser::ast::{Expression, Operator, Statement};
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -115,6 +115,46 @@ impl Parser {
     }
 
     fn expression(&mut self) -> Result<Expression, String> {
+        self.term()
+    }
+
+    fn term(&mut self) -> Result<Expression, String> {
+        let mut expr = self.factor()?;
+
+        while matches!(self.peek(), Token::Plus | Token::Minus) {
+            let operator = self.parse_operator()?;
+            let right = self.factor()?;
+            expr = Expression::Binary {
+                left: Box::new(expr),
+                operator,
+                right: Box::new(right),
+            };
+        }
+
+        Ok(expr)
+    }
+
+    fn factor(&mut self) -> Result<Expression, String> {
+        let mut expr = self.unary()?;
+
+        while matches!(self.peek(), Token::Star | Token::Slash) {
+            let operator = self.parse_operator()?;
+            let right = self.unary()?;
+            expr = Expression::Binary {
+                left: Box::new(expr),
+                operator,
+                right: Box::new(right),
+            };
+        }
+
+        Ok(expr)
+    }
+
+    fn unary(&mut self) -> Result<Expression, String> {
+        self.primary()
+    }
+
+    fn primary(&mut self) -> Result<Expression, String> {
         match self.peek() {
             Token::StringLiteral(lit) => {
                 self.advance();
@@ -133,6 +173,16 @@ impl Parser {
                 Ok(Expression::Identifier(id))
             }
             _ => Err("Unexpected token in expression".to_string()),
+        }
+    }
+
+    fn parse_operator(&mut self) -> Result<Operator, String> {
+        match self.advance() {
+            Token::Plus => Ok(Operator::Plus),
+            Token::Minus => Ok(Operator::Minus),
+            Token::Star => Ok(Operator::Star),
+            Token::Slash => Ok(Operator::Slash),
+            _ => Err("Unexpected token in operator".to_string()),
         }
     }
 

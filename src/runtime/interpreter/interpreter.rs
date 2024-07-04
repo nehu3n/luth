@@ -1,5 +1,5 @@
 use crate::runtime::interpreter::environment::{Environment, Value};
-use crate::runtime::parser::ast::{Expression, Statement};
+use crate::runtime::parser::ast::{Expression, Operator, Statement};
 
 pub struct Interpreter {
     environment: Environment,
@@ -33,7 +33,6 @@ impl Interpreter {
             } => {
                 let val = self.evaluate(value);
                 self.environment.define(name, val, value_type);
-                Ok(())
             }
             Statement::VariableAssignment {
                 name,
@@ -42,12 +41,10 @@ impl Interpreter {
             } => {
                 let val = self.evaluate(value);
                 self.environment.assign(name, val)?;
-                Ok(())
             }
             Statement::Print(value) => {
                 let val = self.evaluate(value);
                 println!("{}", val);
-                Ok(())
             }
             Statement::If {
                 condition,
@@ -55,28 +52,35 @@ impl Interpreter {
                 else_branch,
             } => {
                 if self.evaluate(condition).is_truthy() {
-                    self.execute(*then_branch)
+                    self.execute(*then_branch)?;
                 } else if let Some(else_branch) = else_branch {
-                    self.execute(*else_branch)
-                } else {
-                    Ok(())
+                    self.execute(*else_branch)?;
                 }
             }
         }
+        Ok(())
     }
 
-    fn evaluate(&self, expression: Expression) -> Value {
-        match expression {
+    fn evaluate(&mut self, expr: Expression) -> Value {
+        match expr {
             Expression::StringLiteral(lit) => Value::StringLiteral(lit),
             Expression::NumberLiteral(num) => Value::NumberLiteral(num),
             Expression::BooleanLiteral(b) => Value::BooleanLiteral(b),
-            Expression::Identifier(id) => match self.environment.get(&id) {
-                Ok(val) => val,
-                Err(err) => {
-                    eprintln!("{}", err);
-                    Value::Nil
+            Expression::Identifier(name) => self.environment.get(&name).unwrap_or(Value::Nil),
+            Expression::Binary {
+                left,
+                operator,
+                right,
+            } => {
+                let left = self.evaluate(*left);
+                let right = self.evaluate(*right);
+                match operator {
+                    Operator::Plus => left + right,
+                    Operator::Minus => left - right,
+                    Operator::Star => left * right,
+                    Operator::Slash => left / right,
                 }
-            },
+            }
         }
     }
 }
@@ -88,7 +92,7 @@ impl Value {
             Value::StringLiteral(s) => !s.is_empty(),
             Value::BooleanLiteral(b) => *b,
             Value::Nil => false,
-            _ => true,
+            _ => false,
         }
     }
 }

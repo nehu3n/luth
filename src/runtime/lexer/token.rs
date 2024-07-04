@@ -19,6 +19,11 @@ pub enum Token {
     If,
     Else,
 
+    Plus,
+    Minus,
+    Star,
+    Slash,
+
     LeftParen,
     RightParen,
 

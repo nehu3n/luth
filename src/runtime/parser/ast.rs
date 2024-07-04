@@ -26,4 +26,18 @@ pub enum Expression {
     NumberLiteral(f64),
     BooleanLiteral(bool),
     Identifier(String),
+
+    Binary {
+        left: Box<Expression>,
+        operator: Operator,
+        right: Box<Expression>,
+    },
+}
+
+#[derive(Debug)]
+pub enum Operator {
+    Plus,
+    Minus,
+    Star,
+    Slash,
 }

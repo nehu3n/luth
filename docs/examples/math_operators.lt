@@ -1,0 +1,11 @@
+# Arithmetic:
+
+var sum = 2 + 2;
+var sub = 4 - 2;
+var div = 6 / 2;
+var mul = 3 * 2;
+
+print(sum);
+print(sub);
+print(div);
+print(mul);

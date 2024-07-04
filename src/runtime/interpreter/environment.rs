@@ -1,4 +1,7 @@
-use std::collections::HashMap;
+use std::{
+    collections::HashMap,
+    ops::{Add, Div, Mul, Sub},
+};
 
 use crate::runtime::parser::parser::Type;
 
@@ -13,6 +16,58 @@ pub enum Value {
     NumberLiteral(f64),
     BooleanLiteral(bool),
     Nil,
+}
+
+impl Add for Value {
+    type Output = Value;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (Value::NumberLiteral(lhs), Value::NumberLiteral(rhs)) => {
+                Value::NumberLiteral(lhs + rhs)
+            }
+            _ => Value::Nil,
+        }
+    }
+}
+
+impl Sub for Value {
+    type Output = Value;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (Value::NumberLiteral(lhs), Value::NumberLiteral(rhs)) => {
+                Value::NumberLiteral(lhs - rhs)
+            }
+            _ => Value::Nil,
+        }
+    }
+}
+
+impl Mul for Value {
+    type Output = Value;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (Value::NumberLiteral(lhs), Value::NumberLiteral(rhs)) => {
+                Value::NumberLiteral(lhs * rhs)
+            }
+            _ => Value::Nil,
+        }
+    }
+}
+
+impl Div for Value {
+    type Output = Value;
+
+    fn div(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (Value::NumberLiteral(lhs), Value::NumberLiteral(rhs)) => {
+                Value::NumberLiteral(lhs / rhs)
+            }
+            _ => Value::Nil,
+        }
+    }
 }
 
 impl Environment {
