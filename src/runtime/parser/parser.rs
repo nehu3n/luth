@@ -135,9 +135,25 @@ impl Parser {
     }
 
     fn factor(&mut self) -> Result<Expression, String> {
-        let mut expr = self.unary()?;
+        let mut expr = self.logical()?;
 
         while matches!(self.peek(), Token::Star | Token::Slash) {
+            let operator = self.parse_operator()?;
+            let right = self.logical()?;
+            expr = Expression::Binary {
+                left: Box::new(expr),
+                operator,
+                right: Box::new(right),
+            };
+        }
+
+        Ok(expr)
+    }
+
+    fn logical(&mut self) -> Result<Expression, String> {
+        let mut expr = self.unary()?;
+
+        while matches!(self.peek(), Token::And | Token::Or) {
             let operator = self.parse_operator()?;
             let right = self.unary()?;
             expr = Expression::Binary {
@@ -151,6 +167,14 @@ impl Parser {
     }
 
     fn unary(&mut self) -> Result<Expression, String> {
+        if matches!(self.peek(), Token::Not) {
+            let operator = self.parse_operator()?;
+            let right = self.unary()?;
+            return Ok(Expression::Unary {
+                operator,
+                right: Box::new(right),
+            });
+        }
         self.primary()
     }
 
@@ -172,6 +196,16 @@ impl Parser {
                 self.advance();
                 Ok(Expression::Identifier(id))
             }
+            Token::LeftParen => {
+                self.advance();
+                let expr = self.expression()?;
+                if self.peek() == Token::RightParen {
+                    self.advance();
+                    Ok(expr)
+                } else {
+                    Err("Expected ')' after expression".to_string())
+                }
+            }
             _ => Err("Unexpected token in expression".to_string()),
         }
     }
@@ -182,6 +216,10 @@ impl Parser {
             Token::Minus => Ok(Operator::Minus),
             Token::Star => Ok(Operator::Star),
             Token::Slash => Ok(Operator::Slash),
+
+            Token::And => Ok(Operator::And),
+            Token::Or => Ok(Operator::Or),
+            Token::Not => Ok(Operator::Not),
             _ => Err("Unexpected token in operator".to_string()),
         }
     }

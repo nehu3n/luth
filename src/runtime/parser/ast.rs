@@ -32,6 +32,10 @@ pub enum Expression {
         operator: Operator,
         right: Box<Expression>,
     },
+    Unary {
+        operator: Operator,
+        right: Box<Expression>,
+    },
 }
 
 #[derive(Debug)]
@@ -40,4 +44,8 @@ pub enum Operator {
     Minus,
     Star,
     Slash,
+
+    And,
+    Or,
+    Not,
 }

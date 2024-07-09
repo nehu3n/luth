@@ -24,6 +24,10 @@ pub enum Token {
     Star,
     Slash,
 
+    And,
+    Or,
+    Not,
+
     LeftParen,
     RightParen,
 

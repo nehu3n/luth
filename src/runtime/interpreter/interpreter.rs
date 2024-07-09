@@ -79,6 +79,17 @@ impl Interpreter {
                     Operator::Minus => left - right,
                     Operator::Star => left * right,
                     Operator::Slash => left / right,
+
+                    Operator::And => Value::BooleanLiteral(left.is_truthy() && right.is_truthy()),
+                    Operator::Or => Value::BooleanLiteral(left.is_truthy() || right.is_truthy()),
+                    _ => Value::Nil,
+                }
+            }
+            Expression::Unary { operator, right } => {
+                let right = self.evaluate(*right);
+                match operator {
+                    Operator::Not => Value::BooleanLiteral(!right.is_truthy()),
+                    _ => Value::Nil,
                 }
             }
         }
@@ -92,7 +103,6 @@ impl Value {
             Value::StringLiteral(s) => !s.is_empty(),
             Value::BooleanLiteral(b) => *b,
             Value::Nil => false,
-            _ => false,
         }
     }
 }

@@ -64,6 +64,15 @@ enum LexerToken {
     #[token("/")]
     Slash,
 
+    #[token("&&")]
+    And,
+
+    #[token("||")]
+    Or,
+
+    #[token("!")]
+    Not,
+
     #[token("(")]
     LeftParen,
 
@@ -114,6 +123,10 @@ pub fn lexer(input: &str) -> Vec<Token> {
             Ok(LexerToken::Minus) => tokens.push(Token::Minus),
             Ok(LexerToken::Star) => tokens.push(Token::Star),
             Ok(LexerToken::Slash) => tokens.push(Token::Slash),
+
+            Ok(LexerToken::And) => tokens.push(Token::And),
+            Ok(LexerToken::Or) => tokens.push(Token::Or),
+            Ok(LexerToken::Not) => tokens.push(Token::Not),
 
             Ok(LexerToken::LeftParen) => tokens.push(Token::LeftParen),
             Ok(LexerToken::RightParen) => tokens.push(Token::RightParen),

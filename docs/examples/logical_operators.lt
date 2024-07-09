@@ -1,0 +1,13 @@
+# And:
+print(true && true); # true
+print(true && false); # false
+print(false && false); # false
+
+# Or:
+print(true || true); # true
+print(true || false); # true
+print(false || false); # false
+
+# Not:
+print(!true); # false
+print(!false); # true
