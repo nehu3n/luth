@@ -115,7 +115,31 @@ impl Parser {
     }
 
     fn expression(&mut self) -> Result<Expression, String> {
-        self.term()
+        self.comparison()
+    }
+
+    fn comparison(&mut self) -> Result<Expression, String> {
+        let mut expr = self.term()?;
+
+        while matches!(
+            self.peek(),
+            Token::EqualEqual
+                | Token::NotEqual
+                | Token::LessThan
+                | Token::LessThanEqual
+                | Token::GreaterThan
+                | Token::GreaterThanEqual
+        ) {
+            let operator = self.parse_operator()?;
+            let right = self.term()?;
+            expr = Expression::Binary {
+                left: Box::new(expr),
+                operator,
+                right: Box::new(right),
+            };
+        }
+
+        Ok(expr)
     }
 
     fn term(&mut self) -> Result<Expression, String> {
@@ -175,6 +199,7 @@ impl Parser {
                 right: Box::new(right),
             });
         }
+
         self.primary()
     }
 
@@ -220,6 +245,14 @@ impl Parser {
             Token::And => Ok(Operator::And),
             Token::Or => Ok(Operator::Or),
             Token::Not => Ok(Operator::Not),
+
+            Token::EqualEqual => Ok(Operator::EqualEqual),
+            Token::NotEqual => Ok(Operator::NotEqual),
+            Token::LessThan => Ok(Operator::LessThan),
+            Token::LessThanEqual => Ok(Operator::LessThanEqual),
+            Token::GreaterThan => Ok(Operator::GreaterThan),
+            Token::GreaterThanEqual => Ok(Operator::GreaterThanEqual),
+
             _ => Err("Unexpected token in operator".to_string()),
         }
     }

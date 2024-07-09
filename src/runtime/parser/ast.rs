@@ -48,4 +48,11 @@ pub enum Operator {
     And,
     Or,
     Not,
+
+    EqualEqual,
+    NotEqual,
+    LessThan,
+    LessThanEqual,
+    GreaterThan,
+    GreaterThanEqual,
 }

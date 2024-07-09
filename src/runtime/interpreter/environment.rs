@@ -1,6 +1,5 @@
 use std::{
-    collections::HashMap,
-    ops::{Add, Div, Mul, Sub},
+    cmp::Ordering, collections::HashMap, ops::{Add, Div, Mul, Sub}
 };
 
 use crate::runtime::parser::parser::Type;
@@ -66,6 +65,27 @@ impl Div for Value {
                 Value::NumberLiteral(lhs / rhs)
             }
             _ => Value::Nil,
+        }
+    }
+}
+
+impl PartialEq for Value {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Value::StringLiteral(s1), Value::StringLiteral(s2)) => s1 == s2,
+            (Value::NumberLiteral(n1), Value::NumberLiteral(n2)) => n1 == n2,
+            (Value::BooleanLiteral(b1), Value::BooleanLiteral(b2)) => b1 == b2,
+            (Value::Nil, Value::Nil) => true,
+            _ => false,
+        }
+    }
+}
+
+impl PartialOrd for Value {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        match (self, other) {
+            (Value::NumberLiteral(lhs), Value::NumberLiteral(rhs)) => lhs.partial_cmp(rhs),
+            _ => None,
         }
     }
 }

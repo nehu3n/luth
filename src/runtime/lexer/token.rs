@@ -28,6 +28,13 @@ pub enum Token {
     Or,
     Not,
 
+    EqualEqual,
+    NotEqual,
+    LessThan,
+    LessThanEqual,
+    GreaterThan,
+    GreaterThanEqual,
+
     LeftParen,
     RightParen,
 

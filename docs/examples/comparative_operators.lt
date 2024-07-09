@@ -1,0 +1,27 @@
+# Equal:
+print(2 == 2); # true
+print(2 == 3); # false
+print("hello" == "hello"); # true
+print("hello" == "bye"); # false
+
+# Not Equal:
+print(2 != 2); # false
+print(2 != 3); # true
+print("hello" != "hello"); # false
+print("hello" != "bye"); # true
+
+# Greater Than:
+print(5 > 3); # true
+print(2 > 7); # false
+
+# Less Than:
+print(5 < 3); # false
+print(2 < 7); # true
+
+# Greater Than or Equal To:
+print(5 >= 5); # true
+print(2 >= 7); # false
+
+# Less Than or Equal To:
+print(5 <= 3); # false
+print(2 <= 7); # true

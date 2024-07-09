@@ -82,6 +82,14 @@ impl Interpreter {
 
                     Operator::And => Value::BooleanLiteral(left.is_truthy() && right.is_truthy()),
                     Operator::Or => Value::BooleanLiteral(left.is_truthy() || right.is_truthy()),
+
+                    Operator::EqualEqual => Value::BooleanLiteral(left == right),
+                    Operator::NotEqual => Value::BooleanLiteral(left != right),
+                    Operator::LessThan => Value::BooleanLiteral(left < right),
+                    Operator::LessThanEqual => Value::BooleanLiteral(left <= right),
+                    Operator::GreaterThan => Value::BooleanLiteral(left > right),
+                    Operator::GreaterThanEqual => Value::BooleanLiteral(left >= right),
+
                     _ => Value::Nil,
                 }
             }

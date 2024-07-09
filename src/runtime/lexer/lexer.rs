@@ -73,6 +73,24 @@ enum LexerToken {
     #[token("!")]
     Not,
 
+    #[token("==")]
+    EqualEqual,
+
+    #[token("!=")]
+    NotEqual,
+
+    #[token("<")]
+    LessThan,
+
+    #[token("<=")]
+    LessThanEqual,
+
+    #[token(">")]
+    GreaterThan,
+
+    #[token(">=")]
+    GreaterThanEqual,
+
     #[token("(")]
     LeftParen,
 
@@ -127,6 +145,13 @@ pub fn lexer(input: &str) -> Vec<Token> {
             Ok(LexerToken::And) => tokens.push(Token::And),
             Ok(LexerToken::Or) => tokens.push(Token::Or),
             Ok(LexerToken::Not) => tokens.push(Token::Not),
+
+            Ok(LexerToken::EqualEqual) => tokens.push(Token::EqualEqual),
+            Ok(LexerToken::NotEqual) => tokens.push(Token::NotEqual),
+            Ok(LexerToken::LessThan) => tokens.push(Token::LessThan),
+            Ok(LexerToken::LessThanEqual) => tokens.push(Token::LessThanEqual),
+            Ok(LexerToken::GreaterThan) => tokens.push(Token::GreaterThan),
+            Ok(LexerToken::GreaterThanEqual) => tokens.push(Token::GreaterThanEqual),
 
             Ok(LexerToken::LeftParen) => tokens.push(Token::LeftParen),
             Ok(LexerToken::RightParen) => tokens.push(Token::RightParen),
