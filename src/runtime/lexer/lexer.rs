@@ -64,6 +64,12 @@ enum LexerToken {
     #[token("/")]
     Slash,
 
+    #[token("%")]
+    Percent,
+
+    #[token("**")]
+    Pow,
+
     #[token("&&")]
     And,
 
@@ -141,6 +147,8 @@ pub fn lexer(input: &str) -> Vec<Token> {
             Ok(LexerToken::Minus) => tokens.push(Token::Minus),
             Ok(LexerToken::Star) => tokens.push(Token::Star),
             Ok(LexerToken::Slash) => tokens.push(Token::Slash),
+            Ok(LexerToken::Percent) => tokens.push(Token::Percent),
+            Ok(LexerToken::Pow) => tokens.push(Token::Pow),
 
             Ok(LexerToken::And) => tokens.push(Token::And),
             Ok(LexerToken::Or) => tokens.push(Token::Or),

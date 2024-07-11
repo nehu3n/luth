@@ -161,7 +161,10 @@ impl Parser {
     fn factor(&mut self) -> Result<Expression, String> {
         let mut expr = self.logical()?;
 
-        while matches!(self.peek(), Token::Star | Token::Slash) {
+        while matches!(
+            self.peek(),
+            Token::Star | Token::Slash | Token::Percent | Token::Pow
+        ) {
             let operator = self.parse_operator()?;
             let right = self.logical()?;
             expr = Expression::Binary {
@@ -241,6 +244,8 @@ impl Parser {
             Token::Minus => Ok(Operator::Minus),
             Token::Star => Ok(Operator::Star),
             Token::Slash => Ok(Operator::Slash),
+            Token::Percent => Ok(Operator::Percent),
+            Token::Pow => Ok(Operator::Pow),
 
             Token::And => Ok(Operator::And),
             Token::Or => Ok(Operator::Or),

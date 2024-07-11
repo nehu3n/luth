@@ -44,6 +44,8 @@ pub enum Operator {
     Minus,
     Star,
     Slash,
+    Percent,
+    Pow,
 
     And,
     Or,

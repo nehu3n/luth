@@ -23,6 +23,8 @@ pub enum Token {
     Minus,
     Star,
     Slash,
+    Percent,
+    Pow,
 
     And,
     Or,

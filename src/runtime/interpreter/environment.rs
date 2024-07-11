@@ -1,5 +1,7 @@
 use std::{
-    cmp::Ordering, collections::HashMap, ops::{Add, Div, Mul, Sub}
+    cmp::Ordering,
+    collections::HashMap,
+    ops::{Add, Div, Mul, Rem, Sub},
 };
 
 use crate::runtime::parser::parser::Type;
@@ -63,6 +65,30 @@ impl Div for Value {
         match (self, rhs) {
             (Value::NumberLiteral(lhs), Value::NumberLiteral(rhs)) => {
                 Value::NumberLiteral(lhs / rhs)
+            }
+            _ => Value::Nil,
+        }
+    }
+}
+
+impl Rem for Value {
+    type Output = Value;
+
+    fn rem(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (Value::NumberLiteral(lhs), Value::NumberLiteral(rhs)) => {
+                Value::NumberLiteral(lhs % rhs)
+            }
+            _ => Value::Nil,
+        }
+    }
+}
+
+impl Value {
+    pub fn pow(&self, other: &Value) -> Value {
+        match (self, other) {
+            (Value::NumberLiteral(base), Value::NumberLiteral(exp)) => {
+                Value::NumberLiteral(base.powf(*exp))
             }
             _ => Value::Nil,
         }

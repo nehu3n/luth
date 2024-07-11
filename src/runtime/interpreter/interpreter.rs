@@ -79,6 +79,8 @@ impl Interpreter {
                     Operator::Minus => left - right,
                     Operator::Star => left * right,
                     Operator::Slash => left / right,
+                    Operator::Percent => left % right,
+                    Operator::Pow => left.pow(&right),
 
                     Operator::And => Value::BooleanLiteral(left.is_truthy() && right.is_truthy()),
                     Operator::Or => Value::BooleanLiteral(left.is_truthy() || right.is_truthy()),
