@@ -102,6 +102,36 @@ impl Interpreter {
                     _ => Value::Nil,
                 }
             }
+
+            Expression::Increment(expr) => {
+                let value = self.evaluate(*expr.clone());
+                if let Value::NumberLiteral(mut num) = value {
+                    num += 1.0;
+                    if let Expression::Identifier(name) = *expr {
+                        self.environment
+                            .assign(name.to_string(), Value::NumberLiteral(num))
+                            .unwrap();
+                    }
+                    Value::NumberLiteral(num)
+                } else {
+                    Value::Nil
+                }
+            }
+
+            Expression::Decrement(expr) => {
+                let value = self.evaluate(*expr.clone());
+                if let Value::NumberLiteral(mut num) = value {
+                    num -= 1.0;
+                    if let Expression::Identifier(name) = *expr {
+                        self.environment
+                            .assign(name, Value::NumberLiteral(num))
+                            .unwrap();
+                    }
+                    Value::NumberLiteral(num)
+                } else {
+                    Value::Nil
+                }
+            }
         }
     }
 }

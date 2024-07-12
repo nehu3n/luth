@@ -65,12 +65,34 @@ impl Parser {
             _ => return Err("Expected variable name".to_string()),
         };
 
-        if let Token::Assign = self.advance() {
-            let value = self.expression()?;
+        if matches!(
+            self.peek(),
+            Token::Increment | Token::Decrement | Token::Assign
+        ) {
+            let expr = match self.advance() {
+                Token::Increment => {
+                    Expression::Increment(Box::new(Expression::Identifier(name.clone())))
+                }
+                Token::Decrement => {
+                    Expression::Decrement(Box::new(Expression::Identifier(name.clone())))
+                }
+                Token::Assign => {
+                    let value = self.expression()?;
+                    Expression::Binary {
+                        left: Box::new(Expression::Identifier(name.clone())),
+                        operator: Operator::Assign,
+                        right: Box::new(value),
+                    }
+                }
+                _ => {
+                    return Err("Expected increment, decrement, or assignment operator".to_string())
+                }
+            };
+
             if let Token::Semicolon = self.advance() {
                 return Ok(Statement::VariableAssignment {
                     name,
-                    value,
+                    value: expr,
                     value_type: None,
                 });
             }

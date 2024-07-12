@@ -97,6 +97,12 @@ enum LexerToken {
     #[token(">=")]
     GreaterThanEqual,
 
+    #[token("++")]
+    Increment,
+
+    #[token("--")]
+    Decrement,
+
     #[token("(")]
     LeftParen,
 
@@ -160,6 +166,9 @@ pub fn lexer(input: &str) -> Vec<Token> {
             Ok(LexerToken::LessThanEqual) => tokens.push(Token::LessThanEqual),
             Ok(LexerToken::GreaterThan) => tokens.push(Token::GreaterThan),
             Ok(LexerToken::GreaterThanEqual) => tokens.push(Token::GreaterThanEqual),
+
+            Ok(LexerToken::Increment) => tokens.push(Token::Increment),
+            Ok(LexerToken::Decrement) => tokens.push(Token::Decrement),
 
             Ok(LexerToken::LeftParen) => tokens.push(Token::LeftParen),
             Ok(LexerToken::RightParen) => tokens.push(Token::RightParen),

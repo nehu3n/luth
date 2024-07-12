@@ -20,7 +20,7 @@ pub enum Statement {
     },
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Expression {
     StringLiteral(String),
     NumberLiteral(f64),
@@ -36,9 +36,11 @@ pub enum Expression {
         operator: Operator,
         right: Box<Expression>,
     },
+    Increment(Box<Expression>),
+    Decrement(Box<Expression>),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Operator {
     Plus,
     Minus,
@@ -57,4 +59,6 @@ pub enum Operator {
     LessThanEqual,
     GreaterThan,
     GreaterThanEqual,
+
+    Assign
 }

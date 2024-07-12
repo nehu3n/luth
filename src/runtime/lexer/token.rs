@@ -37,6 +37,9 @@ pub enum Token {
     GreaterThan,
     GreaterThanEqual,
 
+    Increment,
+    Decrement,
+
     LeftParen,
     RightParen,
 

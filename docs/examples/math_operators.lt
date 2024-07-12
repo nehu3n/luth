@@ -13,3 +13,13 @@ print(div);
 print(mul);
 print(per);
 print(pow);
+
+# Increment and Decrement:
+var num = 1;
+print(num); # 1
+
+num++;
+print(num); # 2
+
+num--;
+print(num); # 1
