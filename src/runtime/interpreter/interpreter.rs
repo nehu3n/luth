@@ -46,6 +46,11 @@ impl Interpreter {
                 let val = self.evaluate(value);
                 println!("{}", val);
             }
+            Statement::Block(statements) => {
+                for stmt in statements {
+                    self.execute(stmt)?;
+                }
+            }
             Statement::If {
                 condition,
                 then_branch,
@@ -55,6 +60,14 @@ impl Interpreter {
                     self.execute(*then_branch)?;
                 } else if let Some(else_branch) = else_branch {
                     self.execute(*else_branch)?;
+                }
+            }
+            Statement::While {
+                condition,
+                body,
+            } => {
+                while self.evaluate(condition.clone()).is_truthy() {
+                    self.execute(*body.clone())?;
                 }
             }
         }

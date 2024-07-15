@@ -1,6 +1,7 @@
 use crate::runtime::lexer::token::Token;
 use logos::Logos;
 
+#[allow(dead_code)]
 #[derive(Debug, PartialEq, Logos)]
 enum LexerToken {
     #[regex(r"[ \t\r\x0c]+", logos::skip)]
@@ -109,11 +110,20 @@ enum LexerToken {
     #[token(")")]
     RightParen,
 
+    #[token("{")]
+    LeftBrace,
+
+    #[token("}")]
+    RightBrace,
+
     #[token("if")]
     If,
 
     #[token("else")]
     Else,
+
+    #[token("while")]
+    While,
 
     #[end]
     EOF,
@@ -149,6 +159,8 @@ pub fn lexer(input: &str) -> Vec<Token> {
             Ok(LexerToken::If) => tokens.push(Token::If),
             Ok(LexerToken::Else) => tokens.push(Token::Else),
 
+            Ok(LexerToken::While) => tokens.push(Token::While),
+
             Ok(LexerToken::Plus) => tokens.push(Token::Plus),
             Ok(LexerToken::Minus) => tokens.push(Token::Minus),
             Ok(LexerToken::Star) => tokens.push(Token::Star),
@@ -172,6 +184,9 @@ pub fn lexer(input: &str) -> Vec<Token> {
 
             Ok(LexerToken::LeftParen) => tokens.push(Token::LeftParen),
             Ok(LexerToken::RightParen) => tokens.push(Token::RightParen),
+
+            Ok(LexerToken::LeftBrace) => tokens.push(Token::LeftBrace),
+            Ok(LexerToken::RightBrace) => tokens.push(Token::RightBrace),
 
             Ok(LexerToken::EOF) => tokens.push(Token::EOF),
 

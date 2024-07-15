@@ -29,6 +29,7 @@ impl Parser {
             Token::Identifier(_) => self.variable_assignment(),
             Token::Print => self.print_statement(),
             Token::If => self.if_statement(),
+            Token::While => self.while_statement(),
             _ => Err("Unexpected token in statement".to_string()),
         }
     }
@@ -120,11 +121,11 @@ impl Parser {
         self.advance();
 
         let condition = self.expression()?;
-        let then_branch = Box::new(self.statement()?);
+        let then_branch = Box::new(self.block()?);
 
         let else_branch = if self.peek() == Token::Else {
             self.advance();
-            Some(Box::new(self.statement()?))
+            Some(Box::new(self.block()?))
         } else {
             None
         };
@@ -134,6 +135,35 @@ impl Parser {
             then_branch,
             else_branch,
         })
+    }
+
+    fn while_statement(&mut self) -> Result<Statement, String> {
+        self.advance();
+
+        let condition = self.expression()?;
+        let body = Box::new(self.block()?);
+
+        Ok(Statement::While { condition, body })
+    }
+
+    fn block(&mut self) -> Result<Statement, String> {
+        let mut statements = Vec::new();
+
+        if self.peek() != Token::LeftBrace {
+            return Err("Expected '{' to start block".to_string());
+        }
+        self.advance();
+
+        while self.peek() != Token::RightBrace {
+            statements.push(self.statement()?);
+        }
+
+        if self.peek() != Token::RightBrace {
+            return Err("Expected '}' to end block".to_string());
+        }
+        self.advance();
+
+        Ok(Statement::Block(statements))
     }
 
     fn expression(&mut self) -> Result<Expression, String> {
@@ -308,7 +338,7 @@ impl Parser {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Type {
     String,
     Int,

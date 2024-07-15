@@ -1,6 +1,6 @@
 use super::parser::Type;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Statement {
     VariableDeclaration {
         name: String,
@@ -18,6 +18,11 @@ pub enum Statement {
         then_branch: Box<Statement>,
         else_branch: Option<Box<Statement>>,
     },
+    While {
+        condition: Expression,
+        body: Box<Statement>,
+    },
+    Block(Vec<Statement>),
 }
 
 #[derive(Debug, Clone)]

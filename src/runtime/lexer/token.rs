@@ -19,6 +19,8 @@ pub enum Token {
     If,
     Else,
 
+    While,
+
     Plus,
     Minus,
     Star,
@@ -42,6 +44,9 @@ pub enum Token {
 
     LeftParen,
     RightParen,
+
+    LeftBrace,
+    RightBrace,
 
     EOF,
 }
