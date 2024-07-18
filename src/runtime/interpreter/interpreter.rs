@@ -62,10 +62,7 @@ impl Interpreter {
                     self.execute(*else_branch)?;
                 }
             }
-            Statement::While {
-                condition,
-                body,
-            } => {
+            Statement::While { condition, body } => {
                 while self.evaluate(condition.clone()).is_truthy() {
                     self.execute(*body.clone())?;
                 }
@@ -145,6 +142,26 @@ impl Interpreter {
                     Value::Nil
                 }
             }
+
+            Expression::InlineIf {
+                condition,
+                then_branch,
+                elif_branches,
+                else_branch,
+            } => {
+                if self.evaluate(*condition).is_truthy() {
+                    self.evaluate(*then_branch)
+                } else {
+                    for (elif_condition, elif_branch) in elif_branches {
+                        if self.evaluate(*elif_condition).is_truthy() {
+                            return self.evaluate(*elif_branch);
+                        }
+                    }
+                    self.evaluate(*else_branch)
+                }
+            }
+
+            Expression::Nil => Value::Nil,
         }
     }
 }

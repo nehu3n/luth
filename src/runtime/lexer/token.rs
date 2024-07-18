@@ -18,6 +18,7 @@ pub enum Token {
 
     If,
     Else,
+    Elif,
 
     While,
 

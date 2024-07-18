@@ -166,8 +166,58 @@ impl Parser {
         Ok(Statement::Block(statements))
     }
 
+    fn inline_if(&mut self) -> Result<Expression, String> {
+        self.advance();
+        let condition = Box::new(self.expression()?);
+
+        if self.peek() != Token::Colon {
+            return Err("Expected ':' after if condition".to_string());
+        }
+        self.advance();
+
+        let then_branch = Box::new(self.expression()?);
+
+        let mut elif_branches = Vec::new();
+        let mut else_branch = None;
+
+        while self.peek() == Token::Elif {
+            self.advance();
+            let elif_condition = Box::new(self.expression()?);
+
+            if self.peek() != Token::Colon {
+                return Err("Expected ':' after elif condition".to_string());
+            }
+            self.advance();
+
+            let elif_branch = Box::new(self.expression()?);
+            elif_branches.push((elif_condition, elif_branch));
+        }
+
+        if self.peek() == Token::Else {
+            self.advance();
+
+            if self.peek() != Token::Colon {
+                return Err("Expected ':' after else".to_string());
+            }
+            self.advance();
+
+            else_branch = Some(Box::new(self.expression()?));
+        }
+
+        Ok(Expression::InlineIf {
+            condition,
+            then_branch,
+            elif_branches,
+            else_branch: else_branch.unwrap_or(Box::new(Expression::Nil)),
+        })
+    }
+
     fn expression(&mut self) -> Result<Expression, String> {
-        self.comparison()
+        if self.peek() == Token::If {
+            self.inline_if()
+        } else {
+            self.comparison()
+        }
     }
 
     fn comparison(&mut self) -> Result<Expression, String> {

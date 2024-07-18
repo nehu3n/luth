@@ -122,6 +122,9 @@ enum LexerToken {
     #[token("else")]
     Else,
 
+    #[token("elif")]
+    Elif,
+
     #[token("while")]
     While,
 
@@ -158,6 +161,7 @@ pub fn lexer(input: &str) -> Vec<Token> {
 
             Ok(LexerToken::If) => tokens.push(Token::If),
             Ok(LexerToken::Else) => tokens.push(Token::Else),
+            Ok(LexerToken::Elif) => tokens.push(Token::Elif),
 
             Ok(LexerToken::While) => tokens.push(Token::While),
 

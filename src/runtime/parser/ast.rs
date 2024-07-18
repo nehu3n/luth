@@ -43,6 +43,13 @@ pub enum Expression {
     },
     Increment(Box<Expression>),
     Decrement(Box<Expression>),
+    InlineIf {
+        condition: Box<Expression>,
+        then_branch: Box<Expression>,
+        elif_branches: Vec<(Box<Expression>, Box<Expression>)>,
+        else_branch: Box<Expression>,
+    },
+    Nil,
 }
 
 #[derive(Debug, Clone)]
@@ -65,5 +72,5 @@ pub enum Operator {
     GreaterThan,
     GreaterThanEqual,
 
-    Assign
+    Assign,
 }

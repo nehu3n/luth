@@ -3,3 +3,9 @@ if true {
 } else {
    print("It is false.");
 }
+
+var result1 = if 5 > 3: "five is greater" else: "five is smaller";
+print(result1);
+
+var result2 = if 5 > 7: "five is greater" elif 5 == 7: "five is equal" else: "five is smaller";
+print(result2);
