@@ -80,6 +80,16 @@ enum LexerToken {
     #[token("!")]
     Not,
 
+    #[regex("and|AND")]
+    AndWord,
+
+    #[regex("or|OR")]
+    OrWord,
+
+    /*
+    #[token("not")]
+    NotWord,
+    */
     #[token("==")]
     EqualEqual,
 
@@ -176,6 +186,11 @@ pub fn lexer(input: &str) -> Vec<Token> {
             Ok(LexerToken::Or) => tokens.push(Token::Or),
             Ok(LexerToken::Not) => tokens.push(Token::Not),
 
+            Ok(LexerToken::AndWord) => tokens.push(Token::And),
+            Ok(LexerToken::OrWord) => tokens.push(Token::Or),
+            /*
+            Ok(LexerToken::NotWord) => tokens.push(Token::NotWord),
+            */
             Ok(LexerToken::EqualEqual) => tokens.push(Token::EqualEqual),
             Ok(LexerToken::NotEqual) => tokens.push(Token::NotEqual),
             Ok(LexerToken::LessThan) => tokens.push(Token::LessThan),

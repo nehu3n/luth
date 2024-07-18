@@ -1,13 +1,33 @@
 # And:
+print("AND operator (character):");
+print("");
 print(true && true); # true
 print(true && false); # false
 print(false && false); # false
+print("");
+print("AND operator (word):");
+print("");
+print(true and true); # true
+print(true and false); # true
+print(false and false); # false
+print("");
 
 # Or:
+print("OR operator (character):");
+print("");
 print(true || true); # true
 print(true || false); # true
 print(false || false); # false
+print("");
+print("OR operator (word):");
+print("");
+print(true or true); # true
+print(true or false); # true
+print(false or false); # false
+print("");
 
+print("NOT operator (character):");
+print("");
 # Not:
 print(!true); # false
 print(!false); # true
