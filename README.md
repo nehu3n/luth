@@ -6,6 +6,9 @@ _Luth is a high-level, flexibly-typed, interpreted programming language._
 
 </div>
 
+> [!WARNING]
+> This repository is no longer in development. Development has been moved to a separate organization and is not public for now.
+
 ## 📖 About
 
 _Luth_ is a **multi-paradigm**, **concurrent**, **fast**, **interpreted**, **flexibly-typed** and **easy-to-use** programming language that provides **_flexibility_** in all kinds of uses and projects.
