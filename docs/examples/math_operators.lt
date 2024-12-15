@@ -1,0 +1,25 @@
+# Arithmetic:
+
+var sum = 2 + 2;
+var sub = 4 - 2;
+var div = 6 / 2;
+var mul = 3 * 2;
+var per = 3 % 2;
+var pow = 3 ** 3;
+
+print(sum);
+print(sub);
+print(div);
+print(mul);
+print(per);
+print(pow);
+
+# Increment and Decrement:
+var num = 1;
+print(num); # 1
+
+num++;
+print(num); # 2
+
+num--;
+print(num); # 1
